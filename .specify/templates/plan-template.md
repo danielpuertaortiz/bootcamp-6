@@ -40,7 +40,16 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Scope Fidelity: Confirm in-scope behavior only; out-of-scope features are
+  excluded or explicitly approved via requirement updates.
+- API-Backed Integrity: Confirm all todo mutations persist through backend API
+  and include data consistency considerations.
+- Code Quality: Confirm coding standards (naming, imports, SRP, error handling)
+  and simplicity/DRY expectations are reflected in design choices.
+- Test-First Verification: Define unit/integration test approach per change,
+  include failing-test-first intent, and state coverage impact.
+- UX and Accessibility: For UI changes, confirm themed design consistency,
+  keyboard accessibility, focus visibility, and contrast expectations.
 
 ## Project Structure
 

@@ -129,3 +129,16 @@
 - [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
 - [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
 - [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
+
+## Constitution Alignment *(mandatory)*
+
+- Scope Fidelity: [Explain how this feature stays within documented in-scope
+  behavior and preserves out-of-scope boundaries]
+- API-Backed Integrity: [Describe backend persistence and data consistency
+  expectations for create/update/toggle/delete operations]
+- Code Quality: [List coding-standard or maintainability constraints that shape
+  implementation]
+- Test-First Verification: [List required unit/integration tests and expected
+  coverage impact]
+- UX and Accessibility: [For UI work, define themed consistency, keyboard
+  access, focus states, and contrast expectations]
