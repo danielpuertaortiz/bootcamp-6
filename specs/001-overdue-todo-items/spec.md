@@ -8,6 +8,14 @@
 
 **Input**: User description: "Support for Overdue Todo Items — Users need a clear, visual way to identify which todos have not been completed by their due date."
 
+## Clarifications
+
+### Session 2026-06-13
+
+- Q: What should the overdue visual indicator consist of? → A: Warning icon (⚠ or clock) + color accent on the card (meets WCAG 1.4.1 non-color signal requirement)
+- Q: Should the indicator show how many days overdue, or a binary signal? → A: Binary only — icon + color accent, no day count
+- Q: Should the due date text itself change styling when overdue? → A: Yes — due date text is also styled in the accent/warning color alongside the card-level accent
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Visual Overdue Indicator on Todo List (Priority: P1)
@@ -124,7 +132,12 @@ the overdue indicator remains visible and distinguishable in both modes.
   following are true: it has a due date set, the due date is strictly before
   today's date (not including today), and it is not yet marked as complete.
 - **FR-002**: The todo list MUST visually distinguish overdue items from
-  non-overdue incomplete items and completed items.
+  non-overdue incomplete items and completed items using: (a) a warning icon
+  (⚠ or clock symbol) on the todo card, (b) a color accent applied to the
+  todo card, and (c) the due date text styled in the same accent/warning color.
+  The indicator MUST include a non-color signal (the icon) to satisfy WCAG
+  1.4.1 (Use of Color). The signal is binary — no day count or quantitative
+  text is shown.
 - **FR-003**: The overdue visual indicator MUST be applied automatically on
   every render based on the current date; no user action is required to trigger
   it.
@@ -155,7 +168,8 @@ the overdue indicator remains visible and distinguishable in both modes.
 ### Measurable Outcomes
 
 - **SC-001**: A user can identify all overdue todos within 5 seconds of opening
-  the todo list, without manually reading or comparing any dates.
+  the todo list, without manually reading or comparing any dates. The indicator
+  is binary (overdue or not); no day count or quantitative text is displayed.
 - **SC-002**: The overdue indicator is applied correctly (present or absent) for
   100% of todo items on every page load, covering all combinations of due date
   and completion status.
@@ -202,9 +216,12 @@ the overdue indicator remains visible and distinguishable in both modes.
   non-overdue items; (c) component tests verifying the indicator is removed when
   a todo is toggled to complete. Coverage impact: adds unit and component
   coverage to frontend package, expected to maintain or exceed 80% threshold.
-- **UX and Accessibility**: The overdue indicator MUST use a color and/or icon
-  that meets WCAG AA contrast in both light and dark themes. It MUST NOT obscure
-  or reorder existing interactive elements. Keyboard navigation and visible focus
-  states on all existing controls MUST be preserved. The indicator MUST be
-  consistent with the Halloween-themed visual system (using theme CSS variables
-  rather than hard-coded colors).
+- **UX and Accessibility**: The overdue indicator MUST consist of a warning
+  icon (⚠ or clock) plus a color accent on the todo card, with the due date
+  text also rendered in the same accent/warning color. This three-part treatment
+  satisfies WCAG 1.4.1 by providing a non-color signal (icon). The icon, card
+  accent, and date text color MUST all meet WCAG AA contrast requirements in
+  both light and dark themes. The indicator MUST NOT obscure or reorder existing
+  interactive elements. Keyboard navigation and visible focus states on all
+  existing controls MUST be preserved. All color values MUST use theme CSS
+  variables rather than hard-coded colors.
