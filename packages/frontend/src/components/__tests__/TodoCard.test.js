@@ -100,3 +100,107 @@ describe('TodoCard Component', () => {
     expect(screen.queryByText(/Due:/)).not.toBeInTheDocument();
   });
 });
+
+describe('TodoCard — overdue indicator (US1)', () => {
+  const PAST_DATE = '2020-01-01';
+  const FUTURE_DATE = '2099-12-31';
+
+  const todayStr = (() => {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  })();
+
+  const mockHandlers = {
+    onToggle: jest.fn(),
+    onEdit: jest.fn(),
+    onDelete: jest.fn(),
+  };
+
+  it('applies overdue class to card for incomplete past-due todo', () => {
+    const todo = { id: 1, title: 'Late task', dueDate: PAST_DATE, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).toHaveClass('overdue');
+  });
+
+  it('renders overdue warning icon for incomplete past-due todo', () => {
+    const todo = { id: 1, title: 'Late task', dueDate: PAST_DATE, completed: 0, createdAt: '' };
+    render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(screen.getByLabelText('Overdue')).toBeInTheDocument();
+  });
+
+  it('applies overdue-date class to due date text for overdue todo', () => {
+    const todo = { id: 1, title: 'Late task', dueDate: PAST_DATE, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-due-date')).toHaveClass('overdue-date');
+  });
+
+  it('does NOT apply overdue class when todo is due today', () => {
+    const todo = { id: 1, title: 'Due today', dueDate: todayStr, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+  });
+
+  it('does NOT apply overdue class for incomplete todo with future due date', () => {
+    const todo = { id: 1, title: 'Future task', dueDate: FUTURE_DATE, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+  });
+
+  it('does NOT apply overdue class for incomplete todo with no due date', () => {
+    const todo = { id: 1, title: 'No date task', dueDate: null, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+  });
+
+  it('does NOT apply overdue class for completed todo with past due date', () => {
+    const todo = { id: 1, title: 'Done late', dueDate: PAST_DATE, completed: 1, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+  });
+});
+
+describe('TodoCard — overdue state on toggle (US2)', () => {
+  const PAST_DATE = '2020-01-01';
+  const mockHandlers = { onToggle: jest.fn(), onEdit: jest.fn(), onDelete: jest.fn() };
+
+  it('shows overdue class when todo is incomplete with past due date', () => {
+    const todo = { id: 1, title: 'Task', dueDate: PAST_DATE, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).toHaveClass('overdue');
+  });
+
+  it('removes overdue class when todo is marked complete', () => {
+    const todo = { id: 1, title: 'Task', dueDate: PAST_DATE, completed: 1, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+  });
+
+  it('removes overdue warning icon when todo is marked complete', () => {
+    const todo = { id: 1, title: 'Task', dueDate: PAST_DATE, completed: 1, createdAt: '' };
+    render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(screen.queryByLabelText('Overdue')).not.toBeInTheDocument();
+  });
+});
+
+describe('TodoCard — theme consistency (US3)', () => {
+  const PAST_DATE = '2020-01-01';
+  const mockHandlers = { onToggle: jest.fn(), onEdit: jest.fn(), onDelete: jest.fn() };
+
+  it('applies overdue class regardless of theme attribute on document', () => {
+    document.documentElement.removeAttribute('data-theme');
+    const todo = { id: 1, title: 'Task', dueDate: PAST_DATE, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).toHaveClass('overdue');
+  });
+
+  it('applies overdue class in dark theme', () => {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    const todo = { id: 1, title: 'Task', dueDate: PAST_DATE, completed: 0, createdAt: '' };
+    const { container } = render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+    expect(container.querySelector('.todo-card')).toHaveClass('overdue');
+    document.documentElement.removeAttribute('data-theme');
+  });
+});

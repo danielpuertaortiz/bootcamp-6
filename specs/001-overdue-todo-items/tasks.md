@@ -24,7 +24,7 @@ implementation and testing of each story. All changes are in
 
 **Purpose**: Establish a clean, passing baseline before any changes are made.
 
-- [ ] T001 Run existing frontend test suite and confirm all tests pass before starting: `npm test --workspace=packages/frontend`
+- [X] T001 Run existing frontend test suite and confirm all tests pass before starting: `npm test --workspace=packages/frontend`
 
 **Checkpoint**: All existing tests green — ready to implement.
 
@@ -40,7 +40,7 @@ depend on. No user story work can proceed until this phase is complete.
 first — proving the tests are meaningful before the implementation makes them
 pass.
 
-- [ ] T002 [P] Create `packages/frontend/src/utils/__tests__/todoUtils.test.js` with unit tests for all `isOverdue` boundary cases:
+- [X] T002 [P] Create `packages/frontend/src/utils/__tests__/todoUtils.test.js` with unit tests for all `isOverdue` boundary cases:
   - past due date + incomplete → `true`
   - today's date + incomplete → `false`
   - future due date + incomplete → `false`
@@ -49,7 +49,7 @@ pass.
   - past due date + completed (value `0`) → `true`
   (Tests must FAIL before T003 is implemented)
 
-- [ ] T003 Create `packages/frontend/src/utils/todoUtils.js` exporting `isOverdue(todo)` function that: (1) returns `false` if `todo.dueDate` is null, (2) parses `dueDate` using `new Date(year, month-1, day)` for local-time comparison (avoids UTC timezone off-by-one), (3) returns `true` only when parsed date is strictly before today's local midnight AND `todo.completed !== 1`
+- [X] T003 Create `packages/frontend/src/utils/todoUtils.js` exporting `isOverdue(todo)` function
 
 **Checkpoint**: `npm test --workspace=packages/frontend -- --testPathPattern=todoUtils` — all 6 boundary-case unit tests pass.
 
@@ -67,7 +67,7 @@ the correct subset shows the overdue indicator. See `quickstart.md` Scenario 1.
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T004 [P] [US1] Add overdue-rendering tests to `packages/frontend/src/components/__tests__/TodoCard.test.js`:
+- [X] T004 [P] [US1] Add overdue-rendering tests to `packages/frontend/src/components/__tests__/TodoCard.test.js`:
   - overdue incomplete todo (past date, `completed: 0`) → card has CSS class `overdue`
   - overdue incomplete todo → ⚠ icon element is present in rendered output
   - overdue incomplete todo → due-date text element has `overdue-date` class (or equivalent)
@@ -79,12 +79,12 @@ the correct subset shows the overdue indicator. See `quickstart.md` Scenario 1.
 
 ### Implementation for User Story 1
 
-- [ ] T005 [P] [US1] Add `.todo-card.overdue` CSS block and `.todo-card.overdue .todo-due-date` rule to `packages/frontend/src/App.css`:
+- [X] T005 [P] [US1] Add `.todo-card.overdue` CSS block and `.todo-card.overdue .todo-due-date` rule to `packages/frontend/src/App.css`:
   - `.todo-card.overdue`: add `border-left: 3px solid var(--danger-color)` and a subtle background tint (`background-color` using `--danger-color` at ~8% opacity via `rgba` or CSS `color-mix` if supported, else a low-opacity inline definition)
   - `.todo-card.overdue .todo-due-date`: set `color: var(--danger-color)` and `font-weight: 600`
   - Use only `--danger-color` (defined in both light and dark themes in `packages/frontend/src/styles/theme.css`) — no hard-coded hex values
 
-- [ ] T006 [US1] Modify `packages/frontend/src/components/TodoCard.js` to add overdue indicator:
+- [X] T006 [US1] Modify `packages/frontend/src/components/TodoCard.js` to add overdue indicator:
   - Import `isOverdue` from `../utils/todoUtils`
   - Compute `const overdue = isOverdue(todo)` inside the render function (before the `if (isEditing)` branch)
   - Change card `className` from `` `todo-card ${todo.completed ? 'completed' : ''}` `` to `` `todo-card ${todo.completed ? 'completed' : ''} ${overdue ? 'overdue' : ''}` ``
@@ -110,7 +110,7 @@ overdue class absent. See `quickstart.md` Scenario 2.
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T007 [US2] Add toggle-state tests to `packages/frontend/src/components/__tests__/TodoCard.test.js`:
+- [X] T007 [US2] Add toggle-state tests to `packages/frontend/src/components/__tests__/TodoCard.test.js`:
   - todo with past date + `completed: 0` → card has class `overdue` (baseline)
   - todo with past date + `completed: 1` → card does NOT have class `overdue`
   - todo with past date + `completed: 0` → ⚠ icon present; same todo with `completed: 1` → ⚠ icon absent
@@ -133,9 +133,9 @@ color accent remain visible. See `quickstart.md` Scenario 3.
 
 ### Implementation for User Story 3
 
-- [ ] T008 [P] [US3] Audit `packages/frontend/src/App.css` overdue CSS block added in T005: confirm zero hard-coded hex color values are present — all color references MUST use `var(--danger-color)`. Confirm `packages/frontend/src/styles/theme.css` `[data-theme="dark"]` block already defines `--danger-color: #ef5350` (no `theme.css` changes needed). Document this verification in a comment above the `.todo-card.overdue` block: `/* uses --danger-color; theme-aware: see theme.css */`
+- [X] T008 [P] [US3] Audit `packages/frontend/src/App.css` overdue CSS block added in T005: confirm zero hard-coded hex color values are present — all color references MUST use `var(--danger-color)`. Confirm `packages/frontend/src/styles/theme.css` `[data-theme="dark"]` block already defines `--danger-color: #ef5350` (no `theme.css` changes needed). Document this verification in a comment above the `.todo-card.overdue` block: `/* uses --danger-color; theme-aware: see theme.css */`
 
-- [ ] T009 [US3] Add theme-consistency test to `packages/frontend/src/components/__tests__/TodoCard.test.js`: render an overdue `TodoCard` without any `data-theme` DOM attribute (light mode default) and confirm `overdue` class is present; then verify the same props produce `overdue` class regardless of external theme state (CSS class presence is theme-independent — the rendered color is theme-dependent but determined by CSS, not JS)
+- [X] T009 [US3] Add theme-consistency test to `packages/frontend/src/components/__tests__/TodoCard.test.js`: render an overdue `TodoCard` without any `data-theme` DOM attribute (light mode default) and confirm `overdue` class is present; then verify the same props produce `overdue` class regardless of external theme state (CSS class presence is theme-independent — the rendered color is theme-dependent but determined by CSS, not JS)
 
 **Checkpoint**: `npm test --workspace=packages/frontend` — all tests green. Manual check via `quickstart.md` Scenario 3.
 
@@ -145,9 +145,9 @@ color accent remain visible. See `quickstart.md` Scenario 3.
 
 **Purpose**: Final validation sweep across all user stories.
 
-- [ ] T010 [P] Run full frontend test suite and confirm no regressions: `npm test --workspace=packages/frontend` — all tests (existing + new) must pass
+- [X] T010 [P] Run full frontend test suite and confirm no regressions: `npm test --workspace=packages/frontend` — all tests (existing + new) must pass
 
-- [ ] T011 Complete the manual verification checklist in `specs/001-overdue-todo-items/quickstart.md` — check every item in the Verification Checklist section before marking the feature ready for PR
+- [X] T011 Complete the manual verification checklist in `specs/001-overdue-todo-items/quickstart.md` — check every item in the Verification Checklist section before marking the feature ready for PR
 
 ---
 

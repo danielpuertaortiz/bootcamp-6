@@ -334,6 +334,22 @@ p {
   color: var(--success-color);
 }
 
+/* uses --danger-color; theme-aware: see theme.css */
+.todo-card.overdue {
+  border-left: 3px solid var(--danger-color);
+  background-color: color-mix(in srgb, var(--danger-color) 8%, var(--bg-surface));
+}
+
+.todo-card.overdue .todo-due-date {
+  color: var(--danger-color);
+  font-weight: 600;
+}
+
+.overdue-icon {
+  margin-right: 4px;
+  font-style: normal;
+}
+
 .todo-checkbox {
   width: 20px;
   height: 20px;
